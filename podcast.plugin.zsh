@@ -13,6 +13,8 @@ function _podcast_temp_echo() {
 # $1 - the search text
 function _podcast_search() {
     _podcast_temp_echo $0 $@
+    local pyscript="${0:A:h}/temp.py"
+    python $pyscript $@
 }
 
 # Show a random podcast episode
