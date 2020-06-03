@@ -1,32 +1,47 @@
 
 function _podcast_temp_echo() {
+    # A temporary function for testing purposes that prints out
+    # its arguments
     for var in "$@" 
     do
         echo "$var"
     done
 }
 
+# Search recent podcasts for the search term
+# 
+# $1 - the search text
 function _podcast_search() {
     _podcast_temp_echo $0 $@
 }
 
+# Show a random podcast episode
+#
+# This function does not take any arguments
 function _podcast_random() {
     _podcast_temp_echo $0 $@
 }
 
+# Download a podcast
+#
+# $1 - the short url. Appending this to "dev.to" produces the final url to download
+# $2 - the directory where the podcast is to be saved
 function _podcast_download() {
     _podcast_temp_echo $0 $@
 }
 
+# Display the show art and any metadata
+#
+# $1 - the short url. Appending this to "dev.to" produces the final url of the podcast
 function _podcast_info() {
     _podcast_temp_echo $0 $@
 }
 
+# Browse the list of podcasts page by page
+#
+# $1 - the page number
+# $2 - the number of podcasts per page
 function _podcast_list() {
-    _podcast_temp_echo $0 $@
-}
-
-function _podcast_help() {
     _podcast_temp_echo $0 $@
 }
 
