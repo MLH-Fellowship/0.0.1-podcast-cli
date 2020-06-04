@@ -3,6 +3,8 @@
 # $1 - the short url. Appending this to "dev.to" produces the final url to download
 # $2 - the directory where the podcast is to be saved
 function _podcast_download() {
+    local pyscript="${0:A:h}/download.py"
+    python3 $pyscript $@
 }
 
 # Display the show art and any metadata
@@ -39,12 +41,7 @@ function podcast() {
                 return 1
             fi
 
-            if [[ $3 == '' ]]
-            then 
-                _podcast_download $2 $3
-            else
-                _podcast_download $2 './podcast'
-            fi
+            _podcast_download $2
             ;;
         info)
             if [[ $2 == '' ]] 
