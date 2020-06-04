@@ -13,8 +13,6 @@ function _podcast_temp_echo() {
 # $1 - the search text
 function _podcast_search() {
     _podcast_temp_echo $0 $@
-    local pyscript="${0:A:h}/temp.py"
-    python $pyscript $@
 }
 
 # Show a random podcast episode
@@ -47,6 +45,11 @@ function _podcast_list() {
     _podcast_temp_echo $0 $@
 }
 
+function _podcast_invoke_python() {
+    local pyscript="${0:A:h}/podcast.py"
+    python3 $pyscript $@
+}
+
 function podcast() {
     local opt=$1
     case "$opt" in
@@ -57,10 +60,10 @@ function podcast() {
                 return 1
             fi
 
-            _podcast_search $2
+            _podcast_invoke_python $@
             ;; 
         imfeelinglucky)
-            _podcast_random
+            _podcast_invoke_python $@
             ;;
         download) 
             if [[ $2 == '' ]]

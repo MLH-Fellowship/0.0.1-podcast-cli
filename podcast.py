@@ -1,6 +1,7 @@
 import requests
 import json
 import random
+import sys
 
 from typing          import List
 from string_distance import recursive_levenshtein
@@ -26,7 +27,7 @@ class PodcastEpisode:
 
     def __init__(self, id, path, title):
         self.id = id
-        self.path = f"https://dev.to{path}"
+        self.path = path
         self.title = title
 
     def __str__(self):
@@ -88,7 +89,6 @@ def fetch_podcasts_by_keyword(keyword: str):
     '''
     accepts a string argument, key word
     returns list of PodcastEpisode object with that keyword in the title.
-    if none, displays message.
     '''
 
     keyword_title_matches = []
@@ -98,10 +98,7 @@ def fetch_podcasts_by_keyword(keyword: str):
         if keyword in episode.title.split():
             keyword_title_matches.append(episode)
 
-    if len(keyword_title_matches) > 0:
-        return keyword_title_matches
-    else:
-        print('No keyword title matches')
+    return keyword_title_matches
 
 
 def fetch_random_podcast():
@@ -129,6 +126,36 @@ def save(podcast_file):
     e.g mp3-files2/ like in the shell script written by The Shell Guys.
     '''
     pass
+
+
+def text_format(text, width):
+    ''' 
+    Returns a string with a length exactly equal to width. 
+    If the original text is shorter than width, spaces are appended
+    If the original text is longer than width, it is truncated with ellipses
+
+    - Precondition: width > 3
+    '''
+    if len(text) <= width:
+        text += ' ' * (width - len(text))
+    else:
+        text = text[:width - 3] + "..."
+        
+    assert len(text) == width
+    return text
+
+def print_podcast(podcast):
+    title = text_format(podcast.title, 60)
+    path = podcast.path
+    print(f"{title}\t{path}")
+
+
+if __name__ == "__main__":
+    if sys.argv[1] == "search":
+        keyword = sys.argv[2].lower()
+        podcasts = fetch_podcasts_by_keyword(keyword)
+        for episode in podcasts:
+            print_podcast(episode)          
 
 
 # TESTING CODE BELOW- uncomment relevant piece to test functionality
