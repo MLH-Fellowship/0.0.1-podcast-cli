@@ -112,6 +112,21 @@ def fetch_random_podcast():
 
     return random_episode
 
+
+def fetch_paginated_podcasts(page, per_page):
+    '''
+    fetches podcasts page by page
+
+    - Precondition: page and per_page are integers or numeric strings
+    '''
+    
+    response = requests.get(
+        f"https://dev.to/api/podcast_episodes?page={page}&per_page={per_page}")
+    data = json.loads(response.text)
+
+    return parse_podcast_data(data)
+
+
 def most_recent_podcast(list):
     '''
     returns most recent podcast in a list of PodcastEpisodes
@@ -154,6 +169,30 @@ if __name__ == "__main__":
     if sys.argv[1] == "search":
         keyword = sys.argv[2].lower()
         podcasts = fetch_podcasts_by_keyword(keyword)
+        for episode in podcasts:
+            print_podcast(episode)          
+    
+    elif sys.argv[1] == "random":
+        print_podcast(fetch_random_podcast())
+
+    elif sys.argv[1] == "list":
+        try:
+            # check that the arguments are numeric
+            val = int(sys.argv[2])
+            if val < 0:
+                print("podast list: please enter a positive integer for the page number")
+                sys.exit(1)
+            
+            val = int(sys.argv[3])
+            if val < 0:
+                print("podast list: please enter a positive integer for the number of podcasts per page")
+                sys.exit(1)
+        
+        except ValueError:
+            print("podcast list: please enter an integer for the page number and podcasts per page") 
+            sys.exit(1)
+            
+        podcasts = fetch_paginated_podcasts(sys.argv[2], sys.argv[3])
         for episode in podcasts:
             print_podcast(episode)          
 
